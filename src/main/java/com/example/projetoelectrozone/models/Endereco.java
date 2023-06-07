@@ -8,8 +8,7 @@ public class Endereco {
     private String complemento;
     private String cep;
 
-    public Endereco(int idEndereco, String rua, String bairro, int numero, String cep) {
-        this.idEndereco = idEndereco;
+    public Endereco(String rua, String bairro, int numero, String cep) {
         this.rua = rua;
         this.bairro = bairro;
         this.numero = numero;

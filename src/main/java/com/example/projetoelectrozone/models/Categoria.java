@@ -4,8 +4,7 @@ public class Categoria {
     private int idCategoria;
     private String nome;
 
-    public Categoria(int idCategoria, String nome) {
-        this.idCategoria = idCategoria;
+    public Categoria(String nome) {
         this.nome = nome;
     }
 

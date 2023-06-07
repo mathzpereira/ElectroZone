@@ -6,8 +6,7 @@ public class Compra {
     private String data;
     private int Usuario_cpf;
 
-    public Compra(int idCompra, double valor, String data, int usuario_cpf) {
-        this.idCompra = idCompra;
+    public Compra(double valor, String data, int usuario_cpf) {
         this.valor = valor;
         this.data = data;
         Usuario_cpf = usuario_cpf;

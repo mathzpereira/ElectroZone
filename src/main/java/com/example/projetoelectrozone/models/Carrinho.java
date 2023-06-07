@@ -4,8 +4,7 @@ public class Carrinho {
     private int idCarrinho;
     private int Usuario_cpf;
 
-    public Carrinho(int idCarrinho, int usuario_cpf) {
-        this.idCarrinho = idCarrinho;
+    public Carrinho(int usuario_cpf) {
         Usuario_cpf = usuario_cpf;
     }
 

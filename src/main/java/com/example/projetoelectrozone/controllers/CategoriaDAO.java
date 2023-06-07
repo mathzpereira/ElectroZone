@@ -1,20 +1,19 @@
 package com.example.projetoelectrozone.controllers;
-import com.example.projetoelectrozone.models.Produto;
+
+import com.example.projetoelectrozone.models.Categoria;
+
 import java.sql.SQLException;
-import java.util.ArrayList;
-public class ProdutoDAO extends ConnectionDAO{
+
+public class CategoriaDAO extends ConnectionDAO{
     //DAO - Data Access Object
     boolean sucesso = false; //Para saber se funcionou
     //INSERT
-    public boolean insertProduto(Produto produto) {
+    public boolean insertCategoria(Categoria categoria) {
         connectToDB();
-        String sql = "INSERT INTO Produto (nome, valor, qtd_disponivel, Categoria_idCategoria) values(?,?,?,?)";
+        String sql = "INSERT INTO Categoria (nome) values(?)";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, produto.getNome());
-            pst.setDouble(2, produto.getValor());
-            pst.setInt(3, produto.getQtd_disponivel());
-            pst.setInt(4, produto.getCategoria_idCategoria());
+            pst.setString(1, categoria.getNome());
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -31,7 +30,7 @@ public class ProdutoDAO extends ConnectionDAO{
         return sucesso;
     }
     //UPDATE
-    public boolean updateProduto(int id, Produto produto) {
+    /*public boolean updateProduto(int id, Produto produto) {
         connectToDB();
         String sql = "UPDATE Produto SET nome=?, valor=?, qtd_disponivel=?, Categoria_idCategoria=? where idProduto=?";
         try {
@@ -76,7 +75,7 @@ public class ProdutoDAO extends ConnectionDAO{
             }
         }
         return sucesso;
-    }
+    }*/
     //SELECT
     /*public ArrayList<User> selectUser() {
         ArrayList<User> users = new ArrayList<>();
@@ -108,3 +107,4 @@ public class ProdutoDAO extends ConnectionDAO{
         return users;
     }*/
 }
+

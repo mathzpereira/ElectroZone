@@ -6,8 +6,7 @@ public class Imagem {
     private String dados_imagem;
     private int Produto_idProduto;
 
-    public Imagem(int idImagem, String nome, String dados_imagem, int produto_idProduto) {
-        this.idImagem = idImagem;
+    public Imagem(String nome, String dados_imagem, int produto_idProduto) {
         this.nome = nome;
         this.dados_imagem = dados_imagem;
         Produto_idProduto = produto_idProduto;
