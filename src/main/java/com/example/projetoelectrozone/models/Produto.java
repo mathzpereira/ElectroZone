@@ -14,6 +14,14 @@ public class Produto {
         this.categoria_idCategoria = categoria_idCategoria;
     }
 
+    public Produto(int idProduto, String nome, double valor, int qtd_disponivel, int categoria_idCategoria) {
+        this.idProduto = idProduto;
+        this.nome = nome;
+        this.valor = valor;
+        this.qtd_disponivel = qtd_disponivel;
+        this.categoria_idCategoria = categoria_idCategoria;
+    }
+
     public int getIdProduto() {
         return idProduto;
     }

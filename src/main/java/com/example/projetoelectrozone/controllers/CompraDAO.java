@@ -1,20 +1,20 @@
 package com.example.projetoelectrozone.controllers;
-
-import com.example.projetoelectrozone.models.Categoria;
-
+import com.example.projetoelectrozone.models.Compra;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CategoriaDAO extends ConnectionDAO{
+public class CompraDAO extends ConnectionDAO{
     //DAO - Data Access Object
     boolean sucesso = false; //Para saber se funcionou
     //INSERT
-    public boolean insertCategoria(Categoria categoria) {
+    public boolean insertCompra(Compra compra) {
         connectToDB();
-        String sql = "INSERT INTO Categoria (nome) values(?)";
+        String sql = "INSERT INTO Compra (valor, data, Usuario_cpf) values(?,?,?)";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, categoria.getNome());
+            pst.setDouble(1, compra.getValor());
+            pst.setString(2, compra.getData());
+            pst.setString(3, compra.getUsuario_cpf());
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -31,12 +31,14 @@ public class CategoriaDAO extends ConnectionDAO{
         return sucesso;
     }
     //UPDATE
-    public boolean updateCategoria(int id, Categoria categoria) {
+    public boolean updateCompra(int id, Compra compra) {
         connectToDB();
-        String sql = "UPDATE Categoria SET nome=? where idCategoria=?";
+        String sql = "UPDATE Compra SET valor=?, data=?, Usuario_cpf=? where idCompra=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setInt(2, categoria.getIdCategoria());
+            pst.setDouble(1, compra.getValor());
+            pst.setString(2,compra.getData());
+            pst.setString(3, compra.getUsuario_cpf());
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {
@@ -53,9 +55,9 @@ public class CategoriaDAO extends ConnectionDAO{
         return sucesso;
     }
     //DELETE
-    public boolean deleteCategoria(int id) {
+    public boolean deleteCompra(int id) {
         connectToDB();
-        String sql = "DELETE FROM Categoria where idCategoria=?";
+        String sql = "DELETE FROM Compra where idCompra=?";
         try {
             pst = con.prepareStatement(sql);
             pst.setInt(1, id);
@@ -75,20 +77,22 @@ public class CategoriaDAO extends ConnectionDAO{
         return sucesso;
     }
     //SELECT
-    public ArrayList<Categoria> selectCategoria() {
-        ArrayList<Categoria> categorias = new ArrayList<>();
+    public ArrayList<Compra> selectCompra() {
+        ArrayList<Compra> Compras = new ArrayList<>();
         connectToDB();
-        String sql = "SELECT * FROM Categoria";
+        String sql = "SELECT * FROM Compra";
         try {
             st = con.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("Lista de categorias: ");
+            System.out.println("Lista de Compras: ");
             while (rs.next()) {
-                Categoria categoriaAux = new Categoria(rs.getInt("idCategoria"),rs.getString("nome"));
-                System.out.println("ID = " + categoriaAux.getIdCategoria());
-                System.out.println("Nome = " + categoriaAux.getNome());
+                Compra compraAux = new Compra(rs.getInt("idCompra"),rs.getDouble("valor"),rs.getString("data"),rs.getString("Usuario_cpf"));
+                System.out.println("ID = " + compraAux.getIdCompra());
+                System.out.println("Valor = " + compraAux.getValor());
+                System.out.println("Data = " + compraAux.getData());
+                System.out.println("Usuário = " + compraAux.getUsuario_cpf());
                 System.out.println("--------------------------------");
-                categorias.add(categoriaAux);
+                Compras.add(compraAux);
             }
             sucesso = true;
         } catch (SQLException e) {
@@ -102,7 +106,6 @@ public class CategoriaDAO extends ConnectionDAO{
                 System.out.println("Erro: " + e.getMessage());
             }
         }
-        return categorias;
+        return Compras;
     }
 }
-

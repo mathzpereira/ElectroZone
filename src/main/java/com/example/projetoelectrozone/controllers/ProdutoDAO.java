@@ -2,6 +2,7 @@ package com.example.projetoelectrozone.controllers;
 import com.example.projetoelectrozone.models.Produto;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 public class ProdutoDAO extends ConnectionDAO{
     //DAO - Data Access Object
     boolean sucesso = false; //Para saber se funcionou
@@ -56,9 +57,9 @@ public class ProdutoDAO extends ConnectionDAO{
         return sucesso;
     }
     //DELETE
-    public boolean deleteUser(int id) {
+    public boolean deleteProduto(int id) {
         connectToDB();
-        String sql = "DELETE FROM user where id=?";
+        String sql = "DELETE FROM Produto where idProduto=?";
         try {
             pst = con.prepareStatement(sql);
             pst.setInt(1, id);
@@ -78,20 +79,23 @@ public class ProdutoDAO extends ConnectionDAO{
         return sucesso;
     }
     //SELECT
-    /*public ArrayList<User> selectUser() {
-        ArrayList<User> users = new ArrayList<>();
+    public ArrayList<Produto> selectProduto() {
+        ArrayList<Produto> produtos = new ArrayList<>();
         connectToDB();
-        String sql = "SELECT * FROM user";
+        String sql = "SELECT * FROM Produto";
         try {
             st = con.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("Lista de users: ");
+            System.out.println("Lista de produtos: ");
             while (rs.next()) {
-                User userAux = new User(rs.getString("nome"),rs.getString("cpf"));
-                System.out.println("nome = " + userAux.getNome());
-                System.out.println("cpf = " + userAux.getCpf());
+                Produto produtoAux = new Produto(rs.getInt("idProduto"),rs.getString("nome"),rs.getDouble("valor"),rs.getInt("qtd_disponivel"),rs.getInt("categoria_idCategoria"));
+                System.out.println("ID = " + produtoAux.getIdProduto());
+                System.out.println("Nome = " + produtoAux.getNome());
+                System.out.println("Valor = " + produtoAux.getValor());
+                System.out.println("Qtd disponível = " + produtoAux.getQtd_disponivel());
+                System.out.println("Categoria = " + produtoAux.getCategoria_idCategoria());
                 System.out.println("--------------------------------");
-                users.add(userAux);
+                produtos.add(produtoAux);
             }
             sucesso = true;
         } catch (SQLException e) {
@@ -105,6 +109,6 @@ public class ProdutoDAO extends ConnectionDAO{
                 System.out.println("Erro: " + e.getMessage());
             }
         }
-        return users;
-    }*/
+        return produtos;
+    }
 }

@@ -6,7 +6,7 @@ USE electrozone ;
 -- Table `mydb`.`Usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Usuario` (
-  `cpf` INT NOT NULL,
+  `cpf` VARCHAR(11) NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `senha` VARCHAR(20) NOT NULL,
@@ -17,13 +17,13 @@ CREATE TABLE IF NOT EXISTS electrozone.`Usuario` (
 -- Table `mydb`.`Endereco`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Endereco` (
-  `idEndereco` INT NOT NULL,
+  `idEndereco` INT NOT NULL AUTO_INCREMENT,
   `rua` VARCHAR(45) NOT NULL,
   `bairro` VARCHAR(45) NOT NULL,
   `numero` VARCHAR(5) NOT NULL,
   `complemento` VARCHAR(45) NULL,
   `cep` VARCHAR(8) NOT NULL,
-  `Usuario_cpf` INT NOT NULL,
+  `Usuario_cpf` VARCHAR(11) NOT NULL,
   PRIMARY KEY (`idEndereco`, `Usuario_cpf`),
   CONSTRAINT `fk_Endereco_Usuario`
     FOREIGN KEY (`Usuario_cpf`)
@@ -37,10 +37,10 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Compra`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Compra` (
-  `idCompra` INT NOT NULL,
+  `idCompra` INT NOT NULL AUTO_INCREMENT,
   `valor` VARCHAR(45) NOT NULL,
   `data` DATE NOT NULL,
-  `Usuario_cpf` INT NOT NULL,
+  `Usuario_cpf` VARCHAR(11) NOT NULL,
   PRIMARY KEY (`idCompra`),
   CONSTRAINT `fk_Compra_Usuario1`
     FOREIGN KEY (`Usuario_cpf`)
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS electrozone.`Compra` (
 -- Table `mydb`.`Categoria`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Categoria` (
-  `idCategoria` INT NOT NULL,
+  `idCategoria` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idCategoria`));
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS electrozone.`Categoria` (
 -- Table `mydb`.`Produto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Produto` (
-  `idProduto` INT NOT NULL,
+  `idProduto` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(45) NOT NULL,
   `valor` DOUBLE NOT NULL,
   `qtd_disponivel` INT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS electrozone.`Compra_has_Produto` (
 -- Table `mydb`.`Imagem`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Imagem` (
-  `idImagem` INT NOT NULL,
+  `idImagem` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(45) NOT NULL,
   `dados_imagem` BLOB NOT NULL,
   `Produto_idProduto` INT NOT NULL,
@@ -111,8 +111,8 @@ CREATE TABLE IF NOT EXISTS electrozone.`Imagem` (
 -- Table `mydb`.`Carrinho`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Carrinho` (
-  `idCarrinho` INT NOT NULL,
-  `Usuario_cpf` INT NOT NULL,
+  `idCarrinho` INT NOT NULL AUTO_INCREMENT,
+  `Usuario_cpf` VARCHAR(11) NOT NULL,
   PRIMARY KEY (`idCarrinho`),
   CONSTRAINT `fk_Carrinho_Usuario1`
     FOREIGN KEY (`Usuario_cpf`)

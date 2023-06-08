@@ -1,20 +1,23 @@
 package com.example.projetoelectrozone.controllers;
 
-import com.example.projetoelectrozone.models.Categoria;
+import com.example.projetoelectrozone.models.Usuario;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CategoriaDAO extends ConnectionDAO{
+public class UsuarioDAO extends ConnectionDAO{
     //DAO - Data Access Object
     boolean sucesso = false; //Para saber se funcionou
     //INSERT
-    public boolean insertCategoria(Categoria categoria) {
+    public boolean insertUsuario(Usuario usuario) {
         connectToDB();
-        String sql = "INSERT INTO Categoria (nome) values(?)";
+        String sql = "INSERT INTO Usuario (cpf,nome,email,senha) values(?,?,?,?)";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, categoria.getNome());
+            pst.setString(1, usuario.getCpf());
+            pst.setString(2, usuario.getNome());
+            pst.setString(3, usuario.getEmail());
+            pst.setString(4, usuario.getSenha());
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -31,12 +34,15 @@ public class CategoriaDAO extends ConnectionDAO{
         return sucesso;
     }
     //UPDATE
-    public boolean updateCategoria(int id, Categoria categoria) {
+    public boolean updateUsuario(int id, Usuario usuario) {
         connectToDB();
-        String sql = "UPDATE Categoria SET nome=? where idCategoria=?";
+        String sql = "UPDATE Usuario SET cpf=?, nome=?, email=?, senha=?, Endereco=id_Endereco=? where idUsuario=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setInt(2, categoria.getIdCategoria());
+            pst.setString(1, usuario.getCpf());
+            pst.setString(2, usuario.getNome());
+            pst.setString(3, usuario.getEmail());
+            pst.setString(4, usuario.getSenha());
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {
@@ -53,9 +59,9 @@ public class CategoriaDAO extends ConnectionDAO{
         return sucesso;
     }
     //DELETE
-    public boolean deleteCategoria(int id) {
+    public boolean deleteUsuario(int id) {
         connectToDB();
-        String sql = "DELETE FROM Categoria where idCategoria=?";
+        String sql = "DELETE FROM Usuario where idUsuario=?";
         try {
             pst = con.prepareStatement(sql);
             pst.setInt(1, id);
@@ -75,20 +81,22 @@ public class CategoriaDAO extends ConnectionDAO{
         return sucesso;
     }
     //SELECT
-    public ArrayList<Categoria> selectCategoria() {
-        ArrayList<Categoria> categorias = new ArrayList<>();
+    public ArrayList<Usuario> selectUsuario() {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
         connectToDB();
-        String sql = "SELECT * FROM Categoria";
+        String sql = "SELECT * FROM Usuario";
         try {
             st = con.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("Lista de categorias: ");
+            System.out.println("Lista de usuarios: ");
             while (rs.next()) {
-                Categoria categoriaAux = new Categoria(rs.getInt("idCategoria"),rs.getString("nome"));
-                System.out.println("ID = " + categoriaAux.getIdCategoria());
-                System.out.println("Nome = " + categoriaAux.getNome());
+                Usuario usuarioAux = new Usuario(rs.getString("cpf"),rs.getString("nome"),rs.getString("email"),rs.getString("senha"));
+                System.out.println("CPF = " + usuarioAux.getCpf());
+                System.out.println("Nome = " + usuarioAux.getNome());
+                System.out.println("E-mail = " + usuarioAux.getEmail());
+                System.out.println("Senha = " + usuarioAux.getSenha());
                 System.out.println("--------------------------------");
-                categorias.add(categoriaAux);
+                usuarios.add(usuarioAux);
             }
             sucesso = true;
         } catch (SQLException e) {
@@ -102,7 +110,7 @@ public class CategoriaDAO extends ConnectionDAO{
                 System.out.println("Erro: " + e.getMessage());
             }
         }
-        return categorias;
+        return usuarios;
     }
 }
 
