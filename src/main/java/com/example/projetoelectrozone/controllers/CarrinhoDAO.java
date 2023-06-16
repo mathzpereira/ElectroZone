@@ -1,25 +1,20 @@
 package com.example.projetoelectrozone.controllers;
 
-import com.example.projetoelectrozone.models.Endereco;
+import com.example.projetoelectrozone.models.Carrinho;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class EnderecoDAO extends ConnectionDAO{
+public class CarrinhoDAO extends ConnectionDAO{
     //DAO - Data Access Object
     boolean sucesso = false; //Para saber se funcionou
     //INSERT
-    public boolean insertEndereco(Endereco endereco) {
+    public boolean insertCarrinho(Carrinho carrinho) {
         connectToDB();
-        String sql = "INSERT INTO Endereco (rua, bairro, numero, complemento, cep, Usuario_idUsuario) values(?,?,?,?,?,?)";
+        String sql = "INSERT INTO Carrinho (Usuario_idUsuario) values (?)";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, endereco.getRua());
-            pst.setString(2, endereco.getBairro());
-            pst.setInt(3, endereco.getNumero());
-            pst.setString(4, endereco.getComplemento());
-            pst.setString(5, endereco.getCep());
-            pst.setInt(6,endereco.getUsuario_idUsuario());
+            pst.setInt(1, carrinho.getUsuario_idUsuario());
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -36,17 +31,13 @@ public class EnderecoDAO extends ConnectionDAO{
         return sucesso;
     }
     //UPDATE
-    public boolean updateEndereco(int id, Endereco endereco) {
+    public boolean updateCarrinho(int id, Carrinho carrinho) {
         connectToDB();
-        String sql = "UPDATE Endereco SET rua=?, bairro=?, numero=?, complemento=?, cep=? where idEndereco=?";
+        String sql = "UPDATE Carrinho SET Usuario_idUsuario=? where idCarrinho=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, endereco.getRua());
-            pst.setString(2, endereco.getBairro());
-            pst.setInt(3, endereco.getNumero());
-            pst.setString(4, endereco.getComplemento());
-            pst.setString(5, endereco.getCep());
-            pst.setInt(6, id);
+            pst.setInt(1, carrinho.getUsuario_idUsuario());
+            pst.setInt(2, id);
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {
@@ -63,9 +54,9 @@ public class EnderecoDAO extends ConnectionDAO{
         return sucesso;
     }
     //DELETE
-    public boolean deleteEndereco(int id) {
+    public boolean deleteCarrinho(int id) {
         connectToDB();
-        String sql = "DELETE FROM Endereco where idEndereco=?";
+        String sql = "DELETE FROM Carrinho where idCarrinho=?";
         try {
             pst = con.prepareStatement(sql);
             pst.setInt(1, id);
@@ -85,24 +76,20 @@ public class EnderecoDAO extends ConnectionDAO{
         return sucesso;
     }
     //SELECT
-    public ArrayList<Endereco> selectEndereco() {
-        ArrayList<Endereco> enderecos = new ArrayList<>();
+    public ArrayList<Carrinho> selectCarrinho() {
+        ArrayList<Carrinho> carrinhos = new ArrayList<>();
         connectToDB();
-        String sql = "SELECT * FROM Endereco";
+        String sql = "SELECT * FROM Carrinho";
         try {
             st = con.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("Lista de enderecos: ");
+            System.out.println("Lista de carrinhos: ");
             while (rs.next()) {
-                Endereco enderecoAux = new Endereco(rs.getInt("idEndereco"),rs.getString("rua"),rs.getString("bairro"),rs.getInt("numero"),rs.getString("complemento"),rs.getString("cep"),rs.getInt("Usuario_idUsuario"));
-                System.out.println("ID Endereço = " + enderecoAux.getIdEndereco());
-                System.out.println("Rua = " + enderecoAux.getRua());
-                System.out.println("Bairro = " + enderecoAux.getBairro());
-                System.out.println("Número = " + enderecoAux.getNumero());
-                System.out.println("Complemento = " + enderecoAux.getComplemento());
-                System.out.println("CEP = " + enderecoAux.getCep());
+                Carrinho carrinhoAux = new Carrinho(rs.getInt("idCarrinho"),rs.getInt("Usuario_idUsuario"));
+                System.out.println("ID Carrinho = " + carrinhoAux.getIdCarrinho());
+                System.out.println("CPF Usuário = " + carrinhoAux.getUsuario_idUsuario());
                 System.out.println("--------------------------------");
-                enderecos.add(enderecoAux);
+                carrinhos.add(carrinhoAux);
             }
             sucesso = true;
         } catch (SQLException e) {
@@ -116,7 +103,7 @@ public class EnderecoDAO extends ConnectionDAO{
                 System.out.println("Erro: " + e.getMessage());
             }
         }
-        return enderecos;
+        return carrinhos;
     }
 }
 

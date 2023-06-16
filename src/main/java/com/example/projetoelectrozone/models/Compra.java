@@ -4,19 +4,19 @@ public class Compra {
     private int idCompra;
     private double valor;
     private String data;
-    private String Usuario_cpf;
+    private int Usuario_idUsuario;
 
-    public Compra(double valor, String data, String usuario_cpf) {
+    public Compra(double valor, String data, int usuario_idUsuario) {
         this.valor = valor;
         this.data = data;
-        Usuario_cpf = usuario_cpf;
+        Usuario_idUsuario = usuario_idUsuario;
     }
 
-    public Compra(int idCompra, double valor, String data, String usuario_cpf) {
+    public Compra(int idCompra, double valor, String data, int usuario_idUsuario) {
         this.idCompra = idCompra;
         this.valor = valor;
         this.data = data;
-        Usuario_cpf = usuario_cpf;
+        Usuario_idUsuario = usuario_idUsuario;
     }
 
     public int getIdCompra() {
@@ -43,11 +43,11 @@ public class Compra {
         this.data = data;
     }
 
-    public String getUsuario_cpf() {
-        return Usuario_cpf;
+    public int getUsuario_idUsuario() {
+        return Usuario_idUsuario;
     }
 
-    public void setUsuario_cpf(String usuario_cpf) {
-        Usuario_cpf = usuario_cpf;
+    public void setUsuario_idUsuario(int usuario_idUsuario) {
+        Usuario_idUsuario = usuario_idUsuario;
     }
 }

@@ -36,7 +36,8 @@ public class CategoriaDAO extends ConnectionDAO{
         String sql = "UPDATE Categoria SET nome=? where idCategoria=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setInt(2, categoria.getIdCategoria());
+            pst.setString(1, categoria.getNome());
+            pst.setInt(2, id);
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {

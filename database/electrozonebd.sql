@@ -6,11 +6,12 @@ USE electrozone ;
 -- Table `mydb`.`Usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Usuario` (
-  `cpf` VARCHAR(11) NOT NULL,
+  `idUsuario` INT NOT NULL AUTO_INCREMENT,
+  `cpf` VARCHAR(11) NOT NULL UNIQUE,
   `nome` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL UNIQUE,
   `senha` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`cpf`));
+  PRIMARY KEY (`idUsuario`));
 
 
 -- -----------------------------------------------------
@@ -23,11 +24,11 @@ CREATE TABLE IF NOT EXISTS electrozone.`Endereco` (
   `numero` VARCHAR(5) NOT NULL,
   `complemento` VARCHAR(45) NULL,
   `cep` VARCHAR(8) NOT NULL,
-  `Usuario_cpf` VARCHAR(11) NOT NULL,
-  PRIMARY KEY (`idEndereco`, `Usuario_cpf`),
+  `Usuario_idUsuario` INT NOT NULL,
+  PRIMARY KEY (`idEndereco`, `Usuario_idUsuario`),
   CONSTRAINT `fk_Endereco_Usuario`
-    FOREIGN KEY (`Usuario_cpf`)
-    REFERENCES electrozone.`Usuario` (`cpf`)
+    FOREIGN KEY (`Usuario_idUsuario`)
+    REFERENCES electrozone.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -40,11 +41,11 @@ CREATE TABLE IF NOT EXISTS electrozone.`Compra` (
   `idCompra` INT NOT NULL AUTO_INCREMENT,
   `valor` VARCHAR(45) NOT NULL,
   `data` DATE NOT NULL,
-  `Usuario_cpf` VARCHAR(11) NOT NULL,
+  `Usuario_idUsuario` INT NOT NULL,
   PRIMARY KEY (`idCompra`),
   CONSTRAINT `fk_Compra_Usuario1`
-    FOREIGN KEY (`Usuario_cpf`)
-    REFERENCES electrozone.`Usuario` (`cpf`)
+    FOREIGN KEY (`Usuario_idUsuario`)
+    REFERENCES electrozone.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -112,11 +113,11 @@ CREATE TABLE IF NOT EXISTS electrozone.`Imagem` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Carrinho` (
   `idCarrinho` INT NOT NULL AUTO_INCREMENT,
-  `Usuario_cpf` VARCHAR(11) NOT NULL,
+  `Usuario_idUsuario` INT NOT NULL,
   PRIMARY KEY (`idCarrinho`),
   CONSTRAINT `fk_Carrinho_Usuario1`
-    FOREIGN KEY (`Usuario_cpf`)
-    REFERENCES electrozone.`Usuario` (`cpf`)
+    FOREIGN KEY (`Usuario_idUsuario`)
+    REFERENCES electrozone.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 

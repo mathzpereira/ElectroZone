@@ -9,12 +9,12 @@ public class CompraDAO extends ConnectionDAO{
     //INSERT
     public boolean insertCompra(Compra compra) {
         connectToDB();
-        String sql = "INSERT INTO Compra (valor, data, Usuario_cpf) values(?,?,?)";
+        String sql = "INSERT INTO Compra (valor, data, Usuario_idUsuario) values(?,?,?)";
         try {
             pst = con.prepareStatement(sql);
             pst.setDouble(1, compra.getValor());
             pst.setString(2, compra.getData());
-            pst.setString(3, compra.getUsuario_cpf());
+            pst.setInt(3, compra.getUsuario_idUsuario());
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -33,12 +33,13 @@ public class CompraDAO extends ConnectionDAO{
     //UPDATE
     public boolean updateCompra(int id, Compra compra) {
         connectToDB();
-        String sql = "UPDATE Compra SET valor=?, data=?, Usuario_cpf=? where idCompra=?";
+        String sql = "UPDATE Compra SET valor=?, data=?, Usuario_idUsuario=? where idCompra=?";
         try {
             pst = con.prepareStatement(sql);
             pst.setDouble(1, compra.getValor());
             pst.setString(2,compra.getData());
-            pst.setString(3, compra.getUsuario_cpf());
+            pst.setInt(3, compra.getUsuario_idUsuario());
+            pst.setInt(4, id);
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {
@@ -86,11 +87,11 @@ public class CompraDAO extends ConnectionDAO{
             rs = st.executeQuery(sql);
             System.out.println("Lista de Compras: ");
             while (rs.next()) {
-                Compra compraAux = new Compra(rs.getInt("idCompra"),rs.getDouble("valor"),rs.getString("data"),rs.getString("Usuario_cpf"));
+                Compra compraAux = new Compra(rs.getInt("idCompra"),rs.getDouble("valor"),rs.getString("data"),rs.getInt("Usuario_idUsuario"));
                 System.out.println("ID = " + compraAux.getIdCompra());
                 System.out.println("Valor = " + compraAux.getValor());
                 System.out.println("Data = " + compraAux.getData());
-                System.out.println("Usuário = " + compraAux.getUsuario_cpf());
+                System.out.println("Usuário = " + compraAux.getUsuario_idUsuario());
                 System.out.println("--------------------------------");
                 Compras.add(compraAux);
             }

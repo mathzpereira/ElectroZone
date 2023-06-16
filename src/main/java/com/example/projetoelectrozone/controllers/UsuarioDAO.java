@@ -36,13 +36,14 @@ public class UsuarioDAO extends ConnectionDAO{
     //UPDATE
     public boolean updateUsuario(int id, Usuario usuario) {
         connectToDB();
-        String sql = "UPDATE Usuario SET cpf=?, nome=?, email=?, senha=?, Endereco=id_Endereco=? where idUsuario=?";
+        String sql = "UPDATE Usuario SET cpf=?, nome=?, email=?, senha=? where idUsuario=?";
         try {
             pst = con.prepareStatement(sql);
             pst.setString(1, usuario.getCpf());
             pst.setString(2, usuario.getNome());
             pst.setString(3, usuario.getEmail());
             pst.setString(4, usuario.getSenha());
+            pst.setInt(5, id);
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {
@@ -59,12 +60,12 @@ public class UsuarioDAO extends ConnectionDAO{
         return sucesso;
     }
     //DELETE
-    public boolean deleteUsuario(int id) {
+    public boolean deleteUsuario(String cpf) {
         connectToDB();
-        String sql = "DELETE FROM Usuario where idUsuario=?";
+        String sql = "DELETE FROM Usuario where cpf=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setInt(1, id);
+            pst.setString(1, cpf);
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {
@@ -90,7 +91,8 @@ public class UsuarioDAO extends ConnectionDAO{
             rs = st.executeQuery(sql);
             System.out.println("Lista de usuarios: ");
             while (rs.next()) {
-                Usuario usuarioAux = new Usuario(rs.getString("cpf"),rs.getString("nome"),rs.getString("email"),rs.getString("senha"));
+                Usuario usuarioAux = new Usuario(rs.getInt("idUsuario"),rs.getString("cpf"),rs.getString("nome"),rs.getString("email"),rs.getString("senha"));
+                System.out.println("ID Usuário: " + usuarioAux.getIdUsuario());
                 System.out.println("CPF = " + usuarioAux.getCpf());
                 System.out.println("Nome = " + usuarioAux.getNome());
                 System.out.println("E-mail = " + usuarioAux.getEmail());

@@ -1,25 +1,22 @@
 package com.example.projetoelectrozone.controllers;
 
-import com.example.projetoelectrozone.models.Endereco;
+import com.example.projetoelectrozone.models.Imagem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class EnderecoDAO extends ConnectionDAO{
+public class ImagemDAO extends ConnectionDAO{
     //DAO - Data Access Object
     boolean sucesso = false; //Para saber se funcionou
     //INSERT
-    public boolean insertEndereco(Endereco endereco) {
+    public boolean insertImagem(Imagem imagem) {
         connectToDB();
-        String sql = "INSERT INTO Endereco (rua, bairro, numero, complemento, cep, Usuario_idUsuario) values(?,?,?,?,?,?)";
+        String sql = "INSERT INTO Imagem (nome, dados_imagem, Produto_idProduto) values (?,?,?)";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, endereco.getRua());
-            pst.setString(2, endereco.getBairro());
-            pst.setInt(3, endereco.getNumero());
-            pst.setString(4, endereco.getComplemento());
-            pst.setString(5, endereco.getCep());
-            pst.setInt(6,endereco.getUsuario_idUsuario());
+            pst.setString(1, imagem.getNome());
+            pst.setBinaryStream(2, imagem.getDados_imagem());
+            pst.setInt(3, imagem.getProduto_idProduto());
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -36,17 +33,15 @@ public class EnderecoDAO extends ConnectionDAO{
         return sucesso;
     }
     //UPDATE
-    public boolean updateEndereco(int id, Endereco endereco) {
+    public boolean updateImagem(int id, Imagem imagem) {
         connectToDB();
-        String sql = "UPDATE Endereco SET rua=?, bairro=?, numero=?, complemento=?, cep=? where idEndereco=?";
+        String sql = "UPDATE Imagem SET nome=?, dados_imagem=?, Produto_idProduto=? where idImagem=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(1, endereco.getRua());
-            pst.setString(2, endereco.getBairro());
-            pst.setInt(3, endereco.getNumero());
-            pst.setString(4, endereco.getComplemento());
-            pst.setString(5, endereco.getCep());
-            pst.setInt(6, id);
+            pst.setString(1, imagem.getNome());
+            pst.setBinaryStream(2, imagem.getDados_imagem());
+            pst.setInt(3, imagem.getProduto_idProduto());
+            pst.setInt(4, id);
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {
@@ -63,9 +58,9 @@ public class EnderecoDAO extends ConnectionDAO{
         return sucesso;
     }
     //DELETE
-    public boolean deleteEndereco(int id) {
+    public boolean deleteImagem(int id) {
         connectToDB();
-        String sql = "DELETE FROM Endereco where idEndereco=?";
+        String sql = "DELETE FROM Imagem where idImagem=?";
         try {
             pst = con.prepareStatement(sql);
             pst.setInt(1, id);
@@ -85,24 +80,22 @@ public class EnderecoDAO extends ConnectionDAO{
         return sucesso;
     }
     //SELECT
-    public ArrayList<Endereco> selectEndereco() {
-        ArrayList<Endereco> enderecos = new ArrayList<>();
+    public ArrayList<Imagem> selectImagem() {
+        ArrayList<Imagem> imagems = new ArrayList<>();
         connectToDB();
-        String sql = "SELECT * FROM Endereco";
+        String sql = "SELECT * FROM Imagem";
         try {
             st = con.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("Lista de enderecos: ");
+            System.out.println("Lista de imagens: ");
             while (rs.next()) {
-                Endereco enderecoAux = new Endereco(rs.getInt("idEndereco"),rs.getString("rua"),rs.getString("bairro"),rs.getInt("numero"),rs.getString("complemento"),rs.getString("cep"),rs.getInt("Usuario_idUsuario"));
-                System.out.println("ID Endereço = " + enderecoAux.getIdEndereco());
-                System.out.println("Rua = " + enderecoAux.getRua());
-                System.out.println("Bairro = " + enderecoAux.getBairro());
-                System.out.println("Número = " + enderecoAux.getNumero());
-                System.out.println("Complemento = " + enderecoAux.getComplemento());
-                System.out.println("CEP = " + enderecoAux.getCep());
+                Imagem imagemAux = new Imagem(rs.getString("nome"),rs.getBinaryStream("dados_imagem"),rs.getInt("Produto_idProduto"));
+                System.out.println("ID Imagem = " + imagemAux.getIdImagem());
+                System.out.println("Nome = " + imagemAux.getNome());
+                System.out.println("Dados = " + imagemAux.getDados_imagem());
+                System.out.println("ID Produto = " + imagemAux.getProduto_idProduto());
                 System.out.println("--------------------------------");
-                enderecos.add(enderecoAux);
+                imagems.add(imagemAux);
             }
             sucesso = true;
         } catch (SQLException e) {
@@ -116,7 +109,7 @@ public class EnderecoDAO extends ConnectionDAO{
                 System.out.println("Erro: " + e.getMessage());
             }
         }
-        return enderecos;
+        return imagems;
     }
 }
 

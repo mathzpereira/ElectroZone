@@ -2,10 +2,15 @@ package com.example.projetoelectrozone.models;
 
 public class Carrinho {
     private int idCarrinho;
-    private String Usuario_cpf;
+    private int Usuario_idUsuario;
 
-    public Carrinho(String usuario_cpf) {
-        Usuario_cpf = usuario_cpf;
+    public Carrinho(int usuario_idUsuario) {
+        Usuario_idUsuario = usuario_idUsuario;
+    }
+
+    public Carrinho(int idCarrinho, int usuario_idUsuario) {
+        this.idCarrinho = idCarrinho;
+        Usuario_idUsuario = usuario_idUsuario;
     }
 
     public int getIdCarrinho() {
@@ -16,11 +21,11 @@ public class Carrinho {
         this.idCarrinho = idCarrinho;
     }
 
-    public String getUsuario_cpf() {
-        return Usuario_cpf;
+    public int getUsuario_idUsuario() {
+        return Usuario_idUsuario;
     }
 
-    public void setUsuario_cpf(String usuario_cpf) {
-        Usuario_cpf = usuario_cpf;
+    public void setUsuario_idUsuario(int usuario_idUsuario) {
+        Usuario_idUsuario = usuario_idUsuario;
     }
 }

@@ -37,10 +37,11 @@ public class ProdutoDAO extends ConnectionDAO{
         String sql = "UPDATE Produto SET nome=?, valor=?, qtd_disponivel=?, Categoria_idCategoria=? where idProduto=?";
         try {
             pst = con.prepareStatement(sql);
-            pst.setString(2, produto.getNome());
-            pst.setDouble(3, produto.getValor());
-            pst.setInt(4, produto.getQtd_disponivel());
-            pst.setInt(5, produto.getCategoria_idCategoria());
+            pst.setString(1, produto.getNome());
+            pst.setDouble(2, produto.getValor());
+            pst.setInt(3, produto.getQtd_disponivel());
+            pst.setInt(4, produto.getCategoria_idCategoria());
+            pst.setInt(5, id);
             pst.execute();
             sucesso = true;
         } catch (SQLException ex) {
