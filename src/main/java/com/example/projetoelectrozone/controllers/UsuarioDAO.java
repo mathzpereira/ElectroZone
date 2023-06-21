@@ -114,5 +114,38 @@ public class UsuarioDAO extends ConnectionDAO{
         }
         return usuarios;
     }
+
+    public static int researchFuncionarioIdCaixaComLogin(int idLogin){
+        connect();
+        int idUsuario = 0;
+        String sql = "SELECT * from usuario where Login_idLogin=?";
+
+        try{
+            pst = connection.prepareStatement(sql);
+            pst.setInt(1,idLogin);
+            pst.execute();
+            result = pst.executeQuery();
+
+            while(result.next()){
+                idUsuario = result.getInt("Caixa_id");
+            }
+
+        }catch(SQLException e){
+            System.out.println("Erro de operação: " + e.getMessage());
+        }
+        finally {
+            try{
+                connection.close();
+                result.close();
+                pst.close();
+            }
+            catch (SQLException e){
+                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
+        return idUsuario;
+
+    }
+
 }
 

@@ -6,9 +6,11 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
+    private String cargo;
     private Carrinho carrinho;
     private Endereco endereco;
     private static int id = 0;
+
 
     public Usuario(String cpf, String nome, String email, String senha) {
         id++;
@@ -25,6 +27,14 @@ public class Usuario {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
     public String getCpf() {
