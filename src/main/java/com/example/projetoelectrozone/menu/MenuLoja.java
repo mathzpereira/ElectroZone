@@ -1,6 +1,8 @@
-package com.example.projetoelectrozone;
+package com.example.projetoelectrozone.menu;
 
 import com.example.projetoelectrozone.controllers.*;
+import com.example.projetoelectrozone.exceptions.SaldoInsuficienteException;
+import com.example.projetoelectrozone.exceptions.WrongPasswordException;
 import com.example.projetoelectrozone.models.Compra;
 import com.example.projetoelectrozone.models.Produto;
 import com.example.projetoelectrozone.models.Usuario;
@@ -9,9 +11,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public interface MenuLoja {
+public interface MenuLoja { // Interface com os menus de Cliente e Administrador
 
     static MenuHelper menuCliente(Usuario u) {
+        // Instanciando as classes
         Scanner in = new Scanner(System.in);
         ProdutoDAO produtoDAO = new ProdutoDAO();
         CompraDAO compraDAO = new CompraDAO();
@@ -21,8 +24,8 @@ public interface MenuLoja {
         Compra_has_ProdutoDAO compraHasProdutoDAO = new Compra_has_ProdutoDAO();
         MenuHelper menuHelper = new MenuHelper(true, true);
 
-        int opcao;
-        int idCarrinho = carrinhoDAO.selectCarrinhoID(u.getIdUsuario());
+        int opcao; // Controle do switch
+        int idCarrinho = carrinhoDAO.selectCarrinhoID(u.getIdUsuario()); // Pega o ID do carrinho referente ao usuario
         String email = u.getEmail();
         String senha = u.getSenha();
 
@@ -41,43 +44,42 @@ public interface MenuLoja {
         opcao = in.nextInt();
         switch (opcao) {
             case 1:
-                produtoDAO.selectProduto();
+                produtoDAO.selectProduto(); // Listar todos os produtos
                 break;
             case 2:
                 System.out.print("Adicionar produto ao carrinho: ");
                 int idproduto = in.nextInt();
-                carrinhoHasProdutoDAO.insertCarrinho_has_Produto(idCarrinho, idproduto);
-                System.out.println("Produto adicionado ao Carrinho");
+                carrinhoHasProdutoDAO.insertCarrinho_has_Produto(idCarrinho, idproduto); // Adicionar um produto ao carrinho
                 break;
             case 3:
-                carrinhoHasProdutoDAO.exibirProdutosCarrinho(u.getIdUsuario());
+                carrinhoHasProdutoDAO.exibirCarrinho(u.getIdUsuario()); // Mostrar todos os produtos no carrinho
                 break;
             case 4:
                 System.out.print("Informe o id do Produto: ");
                 int idprodutoAux = in.nextInt();
-                carrinhoHasProdutoDAO.deleteCarrinho_Has_Produto(idCarrinho, idprodutoAux);
-                System.out.println("Produto removido do Carrinho");
+                carrinhoHasProdutoDAO.deleteCarrinho_Has_Produto(idCarrinho, idprodutoAux); // Remover um produto do carrinho
                 break;
             case 5:
-                double valorCompra = carrinhoHasProdutoDAO.exibirProdutosCarrinho(u.getIdUsuario());
+                double valorCompra = carrinhoHasProdutoDAO.exibirCarrinho(u.getIdUsuario()); // Mostrar o carrinho
                 System.out.println("Digite sua senha para concluir a compra: ");
                 in.nextLine();
                 senha = in.nextLine();
                 try {
-                    if (usuarioDAO.selectUsuarioLogin(email, senha) == null)
+                    if (usuarioDAO.selectUsuarioLogin(email, senha) == null) // Verifica se a senha está correta
                         throw new WrongPasswordException();
                     else {
-                        if (valorCompra <= u.getSaldo()) {
+                        if (valorCompra <= u.getSaldo()) { // Verifica se tem saldo suficiente para a compra
                             Compra compra = new Compra(valorCompra, LocalDate.now().toString(), u.getIdUsuario());
-                            compraDAO.insertCompra(compra);
+                            compraDAO.insertCompra(compra); // Insere a compra no banco de dados
+                            // Pega todos os produtos e passa para um arraylist
                             ArrayList<Integer> idProdutos = carrinhoHasProdutoDAO.selectProdutosCarrinho(idCarrinho);
-                            int idCompra = compraDAO.selectUltimaCompraID(u.getIdUsuario());
-                            for (int produto : idProdutos) {
-                                compraHasProdutoDAO.insertCompra_has_Produto(idCompra, produto);
-                                produtoDAO.diminuirEstoque(produto);
+                            int idCompra = compraDAO.selectUltimaCompraID(u.getIdUsuario()); // Pega o ID da compra
+                            for (int produto : idProdutos) { // Percorre o arraylist
+                                compraHasProdutoDAO.insertCompra_has_Produto(idCompra, produto); // Insere a compra e produto na tabela N-M
+                                produtoDAO.diminuirEstoque(produto); // Diminui 1 unidade no estoque do produto
                             }
-                            carrinhoHasProdutoDAO.removerItensCarrinho(idCarrinho);
-                            usuarioDAO.removerSaldo(u.getIdUsuario(), valorCompra);
+                            carrinhoHasProdutoDAO.removerItensCarrinho(idCarrinho); // Remove os itens do carrinho
+                            usuarioDAO.removerSaldo(u.getIdUsuario(), valorCompra); // Deduz o valor da compra do saldo
                         } else {
                             new SaldoInsuficienteException();
                         }
@@ -92,21 +94,22 @@ public interface MenuLoja {
                 in.nextLine();
                 senha = in.nextLine();
                 try {
-                    if (usuarioDAO.selectUsuarioLogin(email, senha) == null)
+                    if (usuarioDAO.selectUsuarioLogin(email, senha) == null) // Verifica se a senha está correta
                         throw new WrongPasswordException();
                     else
-                        usuarioDAO.depositar(u.getIdUsuario(), valor);
+                        usuarioDAO.depositar(u.getIdUsuario(), valor); // Deposita o valor na conta
                 } catch (WrongPasswordException e) {
                 }
                 break;
             case 7:
-                compraDAO.verCompras(u.getIdUsuario());
+                compraDAO.verCompras(u.getIdUsuario()); // Exibe todas as compras do usuário
                 break;
             case 8:
                 System.out.println("Saindo da conta...");
-                menuHelper.setSucesso(false);
+                menuHelper.setSucesso(false); // Quebra o loop do menu e volta para o login
                 break;
             case 9:
+                // Quebra ambos os loops e encerra o programa
                 menuHelper.setFlag(false);
                 menuHelper.setSucesso(false);
                 break;
@@ -114,15 +117,12 @@ public interface MenuLoja {
         return menuHelper;
     }
 
-    static MenuHelper menuADM(Usuario u) {
+    static MenuHelper menuADM() {
+        // Instanciando as classes
         Scanner in = new Scanner(System.in);
-
         ProdutoDAO produtoDAO = new ProdutoDAO();
-        CompraDAO compraDAO = new CompraDAO();
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        CarrinhoDAO carrinhoDAO = new CarrinhoDAO();
         Carrinho_has_ProdutoDAO carrinhoHasProdutoDAO = new Carrinho_has_ProdutoDAO();
-        Compra_has_ProdutoDAO compraHasProdutoDAO = new Compra_has_ProdutoDAO();
         MenuHelper menuHelper = new MenuHelper(true, true);
 
         System.out.println("------------------------------------------------");
@@ -136,109 +136,79 @@ public interface MenuLoja {
         System.out.println("7 - Fazer logout");
         System.out.println("8 - Encerrar");
 
-        int opcao;
-        int idCarrinho = carrinhoDAO.selectCarrinhoID(u.getIdUsuario());
-        String email = u.getEmail();
-        String senha = u.getSenha();
-
+        int opcao; // Controle do switch
         opcao = in.nextInt();
-
         in.nextLine();
 
         switch (opcao) {
 
             case 1:
-
-                System.out.println("Id do produto");
-                int idproduto = in.nextInt();
-
-                in.nextLine();
-
-                System.out.println("Nome do Produto");
+                System.out.println("Novo Produto: ");
+                System.out.print("Nome: ");
                 String nome = in.nextLine();
-
-                System.out.println("Valor do produto");
+                System.out.print("Valor: ");
                 double valor = in.nextDouble();
-
-                System.out.println("Quantidade disponivel");
+                System.out.print("Quantidade disponível: ");
                 int qtd_disponivel = in.nextInt();
                 in.nextLine();
-
-                System.out.println("Categoria");
+                System.out.print("Categoria: ");
                 String categoria = in.nextLine();
 
-                Produto produto=new Produto(idproduto,nome,valor,qtd_disponivel,categoria);
-
-                produtoDAO.insertProduto(produto);
+                Produto produto= new Produto(nome,valor,qtd_disponivel,categoria);
+                produtoDAO.insertProduto(produto); // Adiciona um novo produto
                 break;
 
             case 2:
-                produtoDAO.selectProduto();
+                produtoDAO.selectProduto(); // Mostra todos os produtos cadastrados
                 break;
 
             case 3:
-                System.out.println("Informe o Id do produto que quer atualizar");
+                System.out.print("Informe o ID do produto que quer atualizar: ");
                 int id_p=in.nextInt();
+                if(produtoDAO.selectProdutoEspecifico(id_p) != null) { // Verifica se o produto está cadastrado
+                    in.nextLine();
+                    System.out.print("Novo nome: ");
+                    String nome_p = in.nextLine();
+                    System.out.print("Novo valor: ");
+                    double valor_p = in.nextDouble();
+                    System.out.print("Nova quantidade disponível: ");
+                    int qtd_disponivel_p = in.nextInt();
+                    in.nextLine();
+                    System.out.print("Nova categoria: ");
+                    String categoria_p = in.nextLine();
 
-                System.out.println("Nome do novo produto");
-                String nome_p=in.nextLine();
-
-                System.out.println("Valor do novo produto");
-                double valor_p=in.nextDouble();
-
-                System.out.println("Quantidade disponivel do novo produto");
-                int qtd_disponivel_p = in.nextInt();
-
-                in.nextLine();
-
-                System.out.println("Categoria do novo produto");
-                String categoria_p= in.nextLine();
-
-                Produto produto1=new Produto(nome_p,valor_p,qtd_disponivel_p,categoria_p);
-                produtoDAO.updateProduto(id_p,produto1);
+                    Produto produto1 = new Produto(nome_p, valor_p, qtd_disponivel_p, categoria_p);
+                    produtoDAO.updateProduto(id_p, produto1); // Atualiza as informações do produto
+                } else {
+                    System.out.println("O produto " + id_p + " não existe");
+                }
                 break;
 
             case 4:
                 System.out.print("Informe o id do Produto: ");
                 int idprodutoAux = in.nextInt();
-                produtoDAO.deleteProduto(idprodutoAux);
-                System.out.println("Produto removido do Carrinho");
+                carrinhoHasProdutoDAO.removerCarrinhoProdutoExcluido(idprodutoAux); // Remove do carrinho de todos que tem o produto
+                produtoDAO.deleteProduto(idprodutoAux); // Exclui o produto do banco de dados
+                System.out.println("Produto removido da Loja");
                 break;
             case 5:
-                usuarioDAO.selectUsuario();
+                usuarioDAO.selectUsuario(); // Mostra todos os usuários registrados
+                break;
             case 6:
-                System.out.println("CPF do administrador");
-                String cpf_adm=in.nextLine();
-
-                System.out.println("Nome do administrador");
-                String nome_adm=in.nextLine();
-
-                System.out.println("Email do administrador");
-                String email_adm=in.nextLine();
-
-                System.out.println("Senha do administrador");
-                String senha_adm=in.nextLine();
-
-                System.out.println("Cargo do administrador");
-                String cargo_adm=in.nextLine();
-
-                Usuario usuario=new Usuario(cpf_adm,nome_adm,email_adm,senha_adm,cargo_adm);
-
-                usuarioDAO.insertUsuario(usuario);
-
+                MenuLogin.registrarADM(); // Registra um novo usuário de administrador
                 break;
             case 7:
                 System.out.println("Saindo da conta...");
-                menuHelper.setSucesso(false);
+                menuHelper.setSucesso(false); // Quebra o loop do menu e volta para o login
                 break;
             case 8:
+                // Quebra ambos os loops e encerra o programa
                 menuHelper.setFlag(false);
                 menuHelper.setSucesso(false);
                 break;
         }
 
         return menuHelper;
-
 
     }
 

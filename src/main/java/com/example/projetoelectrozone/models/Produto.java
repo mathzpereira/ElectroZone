@@ -7,6 +7,7 @@ public class Produto {
     private int qtd_disponivel;
     private String categoria;
 
+    // Construtores
     public Produto(String nome, double valor, int qtd_disponivel, String categoria) {
         this.nome = nome;
         this.valor = valor;
@@ -28,13 +29,9 @@ public class Produto {
         this.valor = valor;
     }
 
-
+    // Getters e setters
     public int getIdProduto() {
         return idProduto;
-    }
-
-    public void setIdProduto(int idProduto) {
-        this.idProduto = idProduto;
     }
 
     public String getNome() {
@@ -49,23 +46,11 @@ public class Produto {
         return valor;
     }
 
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
     public int getQtd_disponivel() {
         return qtd_disponivel;
     }
 
-    public void setQtd_disponivel(int qtd_disponivel) {
-        this.qtd_disponivel = qtd_disponivel;
-    }
-
     public String getCategoria() {
         return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
     }
 }

@@ -6,6 +6,7 @@ public class Compra {
     private String data;
     private int Usuario_idUsuario;
 
+    // Construtores
     public Compra(double valor, String data, int usuario_idUsuario) {
         this.valor = valor;
         this.data = data;
@@ -25,20 +26,14 @@ public class Compra {
         this.data = data;
     }
 
+    // Getters e setters
+
     public int getIdCompra() {
         return idCompra;
     }
 
-    public void setIdCompra(int idCompra) {
-        this.idCompra = idCompra;
-    }
-
     public double getValor() {
         return valor;
-    }
-
-    public void setValor(double valor) {
-        this.valor = valor;
     }
 
     public String getData() {
@@ -51,9 +46,5 @@ public class Compra {
 
     public int getUsuario_idUsuario() {
         return Usuario_idUsuario;
-    }
-
-    public void setUsuario_idUsuario(int usuario_idUsuario) {
-        Usuario_idUsuario = usuario_idUsuario;
     }
 }

@@ -12,6 +12,7 @@ public class Compra_has_ProdutoDAO extends ConnectionDAO{
     public boolean insertCompra_has_Produto(int Compra_idCompra, int Produto_idProduto) {
         connectToDB();
         Compra_has_Produto compraHasProduto = new Compra_has_Produto(Compra_idCompra, Produto_idProduto);
+        // Insere os produtos referentes a cada compra na tabela N-M
         String sql = "INSERT INTO Compra_has_Produto (Compra_idCompra, Produto_idProduto) values(?,?)";
         try {
             pst = con.prepareStatement(sql);

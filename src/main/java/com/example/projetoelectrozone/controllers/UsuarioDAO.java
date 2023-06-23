@@ -11,6 +11,7 @@ public class UsuarioDAO extends ConnectionDAO{
     //INSERT
     public boolean insertUsuario(Usuario usuario) {
         connectToDB();
+        // Adiciona um novo usuário na tabela
         String sql = "INSERT INTO Usuario (cpf,nome,email,senha,cargo,saldo) values(?,?,?,?,?,0)";
         try {
             pst = con.prepareStatement(sql);
@@ -34,59 +35,11 @@ public class UsuarioDAO extends ConnectionDAO{
         }
         return sucesso;
     }
-    //UPDATE
-    public boolean updateUsuario(int id, Usuario usuario) {
-        connectToDB();
-        String sql = "UPDATE Usuario SET cpf=?, nome=?, email=?, senha=?, cargo=? where idUsuario=?";
-        try {
-            pst = con.prepareStatement(sql);
-            pst.setString(1, usuario.getCpf());
-            pst.setString(2, usuario.getNome());
-            pst.setString(3, usuario.getEmail());
-            pst.setString(4, usuario.getSenha());
-            pst.setString(5, usuario.getCargo());
-            pst.setInt(6, id);
-            pst.execute();
-            sucesso = true;
-        } catch (SQLException ex) {
-            System.out.println("Erro = " + ex.getMessage());
-            sucesso = false;
-        } finally {
-            try {
-                con.close();
-                pst.close();
-            } catch (SQLException exc) {
-                System.out.println("Erro: " + exc.getMessage());
-            }
-        }
-        return sucesso;
-    }
-    //DELETE
-    public boolean deleteUsuario(String cpf) {
-        connectToDB();
-        String sql = "DELETE FROM Usuario where cpf=?";
-        try {
-            pst = con.prepareStatement(sql);
-            pst.setString(1, cpf);
-            pst.execute();
-            sucesso = true;
-        } catch (SQLException ex) {
-            System.out.println("Erro = " + ex.getMessage());
-            sucesso = false;
-        } finally {
-            try {
-                con.close();
-                pst.close();
-            } catch (SQLException exc) {
-                System.out.println("Erro: " + exc.getMessage());
-            }
-        }
-        return sucesso;
-    }
     //SELECT
     public ArrayList<Usuario> selectUsuario() {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         connectToDB();
+        // Exibe todos os usuários registrados
         String sql = "SELECT * FROM Usuario";
         try {
             st = con.createStatement();
@@ -95,10 +48,13 @@ public class UsuarioDAO extends ConnectionDAO{
             while (rs.next()) {
                 Usuario usuarioAux = new Usuario(rs.getInt("idUsuario"),rs.getString("cpf"),rs.getString("nome"),rs.getString("email"),rs.getString("senha"),rs.getString("cargo"),rs.getDouble("saldo"));
                 System.out.println("ID Usuário: " + usuarioAux.getIdUsuario());
-                System.out.println("CPF = " + usuarioAux.getCpf());
-                System.out.println("Nome = " + usuarioAux.getNome());
+                if(usuarioAux.getCargo().equals("Cliente")) {
+                    System.out.println("CPF = " + usuarioAux.getCpf());
+                    System.out.println("Nome = " + usuarioAux.getNome());
+                }
                 System.out.println("E-mail = " + usuarioAux.getEmail());
                 System.out.println("Senha = " + usuarioAux.getSenha());
+                System.out.println("Cargo = " + usuarioAux.getCargo());
                 System.out.println("--------------------------------");
                 usuarios.add(usuarioAux);
             }
@@ -119,15 +75,16 @@ public class UsuarioDAO extends ConnectionDAO{
 
     public Usuario selectUsuarioLogin(String email, String senha) {
         connectToDB();
+        // Faz a autenticação do login
         String sql = "SELECT * FROM Usuario WHERE email=? AND senha=?";
-        Usuario usuario = null;
+        Usuario usuario = null; // Começa como null
 
         try {
             pst = con.prepareStatement(sql);
             pst.setString(1, email);
             pst.setString(2, senha);
             rs = pst.executeQuery();
-            if(rs != null && rs.next()){
+            if(rs != null && rs.next()){ // Se houver um usuário correspondente ao email e senha
                 usuario = new Usuario(rs.getInt("idUsuario"),rs.getString("cpf"),rs.getString("nome"),rs.getString("email"),rs.getString("senha"),rs.getString("cargo"),rs.getDouble("saldo"));
             }
             sucesso = true;
@@ -146,6 +103,7 @@ public class UsuarioDAO extends ConnectionDAO{
 
     public int selectUsuarioID(String email, String senha) {
         connectToDB();
+        // Verifica o ID referente ao usuario do email e senha informados
         String sql = "SELECT idUsuario FROM Usuario WHERE email=? AND senha=?";
         int id = 0;
         try {
@@ -165,16 +123,18 @@ public class UsuarioDAO extends ConnectionDAO{
                 System.out.println("Erro: " + e.getMessage());
             }
         }
-        return id;
+        return id; // Retorna o id do usuário
     }
     public void depositar(int idUsuario, double valor) {
         connectToDB();
+        // Aumenta o saldo de acordo com o valor digitado
         String sql = "UPDATE Usuario SET saldo = saldo + ? where idUsuario=?";
         try {
             pst = con.prepareStatement(sql);
             pst.setDouble(1, valor);
             pst.setInt(2, idUsuario);
             pst.execute();
+            System.out.println("Valor depositado com sucesso");
             sucesso = true;
         } catch (SQLException ex) {
             System.out.println("Erro = " + ex.getMessage());
@@ -191,6 +151,7 @@ public class UsuarioDAO extends ConnectionDAO{
 
     public void removerSaldo(int idUsuario, double valorCompra) {
         connectToDB();
+        // Diminui o saldo de acordo com o valor da compra
         String sql = "UPDATE Usuario SET saldo = saldo - ? where idUsuario=?";
         try {
             pst = con.prepareStatement(sql);

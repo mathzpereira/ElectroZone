@@ -7,12 +7,12 @@ USE electrozone ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Usuario` (
   `idUsuario` INT NOT NULL AUTO_INCREMENT,
-  `cpf` VARCHAR(11) NOT NULL UNIQUE,
-  `nome` VARCHAR(45) NOT NULL,
+  `cpf` VARCHAR(11) UNIQUE,
+  `nome` VARCHAR(45),
   `email` VARCHAR(45) NOT NULL UNIQUE,
   `senha` VARCHAR(20) NOT NULL,
   `cargo` VARCHAR(20) NOT NULL,
-  `saldo` DOUBLE NOT NULL,
+  `saldo` DOUBLE,
   
   PRIMARY KEY (`idUsuario`));
 
@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS electrozone.`Endereco` (
   `rua` VARCHAR(45) NOT NULL,
   `bairro` VARCHAR(45) NOT NULL,
   `numero` VARCHAR(5) NOT NULL,
-  `complemento` VARCHAR(45) NULL,
   `cep` VARCHAR(8) NOT NULL,
   `Usuario_idUsuario` INT NOT NULL,
   PRIMARY KEY (`idEndereco`, `Usuario_idUsuario`),

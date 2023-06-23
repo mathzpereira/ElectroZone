@@ -1,14 +1,16 @@
-package com.example.projetoelectrozone;
+package com.example.projetoelectrozone.menu;
 
-public class MenuHelper {
+public class MenuHelper { // Classe helper para controle do logout e encerramento do programa
     private boolean flag;
     private boolean sucesso;
 
+    // Construtor
     public MenuHelper(boolean flag, boolean sucesso) {
         this.flag = flag;
         this.sucesso = sucesso;
     }
 
+    // Getters e setters
     public boolean isFlag() {
         return flag;
     }

@@ -4,6 +4,7 @@ public class Carrinho {
     private int idCarrinho;
     private int Usuario_idUsuario;
 
+    // Construtores
     public Carrinho(int usuario_idUsuario) {
         Usuario_idUsuario = usuario_idUsuario;
     }
@@ -13,19 +14,12 @@ public class Carrinho {
         Usuario_idUsuario = usuario_idUsuario;
     }
 
+    // Getter
     public int getIdCarrinho() {
         return idCarrinho;
     }
 
-    public void setIdCarrinho(int idCarrinho) {
-        this.idCarrinho = idCarrinho;
-    }
-
     public int getUsuario_idUsuario() {
         return Usuario_idUsuario;
-    }
-
-    public void setUsuario_idUsuario(int usuario_idUsuario) {
-        Usuario_idUsuario = usuario_idUsuario;
     }
 }
