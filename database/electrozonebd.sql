@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS electrozone.`Usuario` (
   `email` VARCHAR(45) NOT NULL UNIQUE,
   `senha` VARCHAR(20) NOT NULL,
   `cargo` VARCHAR(20) NOT NULL,
-  `saldo` VARCHAR(20) NOT NULL,
+  `saldo` DOUBLE NOT NULL,
+  
   PRIMARY KEY (`idUsuario`));
 
 -- -----------------------------------------------------
