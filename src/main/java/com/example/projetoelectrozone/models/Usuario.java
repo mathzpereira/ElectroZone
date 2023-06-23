@@ -12,6 +12,14 @@ public class Usuario {
     private double saldo;
     public boolean sucesso;
 
+    public Usuario(String cpf, String nome, String email, String senha, String cargo) {
+        this.cpf = cpf;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.cargo = cargo;
+    }
+
     public Usuario(String cpf, String nome, String email, String senha, String cargo, double saldo) {
         this.cpf = cpf;
         this.nome = nome;

@@ -8,7 +8,7 @@ public abstract class ConnectionDAO {
     ResultSet rs; //resposta do banco
     String database = "electrozone";//nome do BD
     String user = "root";
-    String password = "root";
+    String password = "familiatudo";
     String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
 
     public void connectToDB() {

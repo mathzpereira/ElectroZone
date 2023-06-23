@@ -28,6 +28,7 @@ public class Produto {
         this.valor = valor;
     }
 
+
     public int getIdProduto() {
         return idProduto;
     }

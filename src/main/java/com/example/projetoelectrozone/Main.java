@@ -41,7 +41,11 @@ public class Main implements MenuLogin{
 
             System.out.println("------------------------------------------------");
             System.out.println("ElectroZone - O melhor lugar para comprar seus eletrônicos");
-            System.out.print("Digite 1 para fazer login ou 2 para se cadastrar ou 3 para encerrar: ");
+            System.out.println("Digite 1 - Para fazer login");
+            System.out.println("Digite 2 - Para se cadastrar");
+            System.out.println("Digite 3 - Para encerrar");
+            System.out.println("------------------------------------------------");
+
             int opLogin = in.nextInt();
             while (opLogin != 1 && opLogin != 2 && opLogin != 3) {
                 System.out.println("Opção Inválida. Digite 1 para fazer login ou 2 para se cadastrar ou 3 para encerrar: ");
