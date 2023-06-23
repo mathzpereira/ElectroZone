@@ -9,8 +9,9 @@ public class Compra_has_ProdutoDAO extends ConnectionDAO{
     //DAO - Data Access Object
     boolean sucesso = false; //Para saber se funcionou
     //INSERT
-    public boolean insertCarrinho_has_Produto(Compra_has_Produto compraHasProduto) {
+    public boolean insertCompra_has_Produto(int Compra_idCompra, int Produto_idProduto) {
         connectToDB();
+        Compra_has_Produto compraHasProduto = new Compra_has_Produto(Compra_idCompra, Produto_idProduto);
         String sql = "INSERT INTO Compra_has_Produto (Compra_idCompra, Produto_idProduto) values(?,?)";
         try {
             pst = con.prepareStatement(sql);

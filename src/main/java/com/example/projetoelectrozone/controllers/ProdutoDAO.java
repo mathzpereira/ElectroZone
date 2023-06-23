@@ -15,7 +15,7 @@ public class ProdutoDAO extends ConnectionDAO{
             pst.setString(1, produto.getNome());
             pst.setDouble(2, produto.getValor());
             pst.setInt(3, produto.getQtd_disponivel());
-            pst.setInt(4, produto.getCategoria_idCategoria());
+            pst.setString(4, produto.getCategoria());
             pst.execute();
             sucesso = true;
         } catch (SQLException exc) {
@@ -40,7 +40,7 @@ public class ProdutoDAO extends ConnectionDAO{
             pst.setString(1, produto.getNome());
             pst.setDouble(2, produto.getValor());
             pst.setInt(3, produto.getQtd_disponivel());
-            pst.setInt(4, produto.getCategoria_idCategoria());
+            pst.setString(4, produto.getCategoria());
             pst.setInt(5, id);
             pst.execute();
             sucesso = true;
@@ -89,12 +89,12 @@ public class ProdutoDAO extends ConnectionDAO{
             rs = st.executeQuery(sql);
             System.out.println("Lista de produtos: ");
             while (rs.next()) {
-                Produto produtoAux = new Produto(rs.getInt("idProduto"),rs.getString("nome"),rs.getDouble("valor"),rs.getInt("qtd_disponivel"),rs.getInt("categoria_idCategoria"));
+                Produto produtoAux = new Produto(rs.getInt("idProduto"),rs.getString("nome"),rs.getDouble("valor"),rs.getInt("qtd_disponivel"),rs.getString("categoria"));
                 System.out.println("ID = " + produtoAux.getIdProduto());
                 System.out.println("Nome = " + produtoAux.getNome());
-                System.out.println("Valor = " + produtoAux.getValor());
+                System.out.println("Valor = R$ " + String.format("%.2f",produtoAux.getValor()));
                 System.out.println("Qtd disponível = " + produtoAux.getQtd_disponivel());
-                System.out.println("Categoria = " + produtoAux.getCategoria_idCategoria());
+                System.out.println("Categoria = " + produtoAux.getCategoria());
                 System.out.println("--------------------------------");
                 produtos.add(produtoAux);
             }
@@ -111,5 +111,27 @@ public class ProdutoDAO extends ConnectionDAO{
             }
         }
         return produtos;
+    }
+
+    public boolean diminuirEstoque(int idProduto) {
+        connectToDB();
+        String sql = "UPDATE Produto SET qtd_disponivel= qtd_disponivel - 1 WHERE idProduto=?";
+        try {
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, idProduto);
+            pst.execute();
+            sucesso = true;
+        } catch (SQLException ex) {
+            System.out.println("Erro = " + ex.getMessage());
+            sucesso = false;
+        } finally {
+            try {
+                con.close();
+                pst.close();
+            } catch (SQLException exc) {
+                System.out.println("Erro: " + exc.getMessage());
+            }
+        }
+        return sucesso;
     }
 }

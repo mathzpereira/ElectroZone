@@ -2,6 +2,8 @@ package com.example.projetoelectrozone.controllers;
 import com.example.projetoelectrozone.models.Compra;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CompraDAO extends ConnectionDAO{
     //DAO - Data Access Object
@@ -109,4 +111,91 @@ public class CompraDAO extends ConnectionDAO{
         }
         return Compras;
     }
+
+    public int selectUltimaCompraID(int idUsuario) {
+        connectToDB();
+        String sql = "SELECT idCompra FROM compra c, usuario u WHERE u.idUsuario = c.usuario_idusuario AND c.usuario_idusuario=? ORDER BY idCompra DESC LIMIT 1";
+        int id = 0;
+        try {
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, idUsuario);
+            rs = pst.executeQuery();
+            if(rs.next()){
+                id = rs.getInt("idCompra");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+        return id;
+    }
+
+    public void verCompras(int idUsuario) {
+        connectToDB();
+        String sql = "SELECT c.idCompra, c.data, c.valor as valorCompra, p.nome, p.valor FROM compra c, usuario u, produto p, compra_has_produto chp WHERE u.idUsuario = c.usuario_idusuario AND chp.Compra_idCompra = c.idCompra AND chp.Produto_idProduto = p.idProduto AND u.idUsuario = ? ORDER BY c.idCompra";
+        try {
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, idUsuario);
+            rs = pst.executeQuery();
+            System.out.println("Lista de Compras: ");
+            int idCompraAnterior = -1; // Variável para acompanhar o ID da compra anterior
+            while (rs.next()) {
+                int idCompra = rs.getInt("idCompra");
+                if (idCompra != idCompraAnterior) {
+                    Compra compraAux = new Compra(idCompra, rs.getDouble("valorCompra"), rs.getString("data"));
+                    System.out.println("--------------------------------");
+                    System.out.println("ID = " + compraAux.getIdCompra());
+                    System.out.println("Data = " + compraAux.getData());
+                    System.out.println("Valor Total = R$ " + String.format("%.2f",compraAux.getValor()));
+                    System.out.println("Produtos: ");
+                    idCompraAnterior = idCompra; // Atualiza o ID da compra anterior
+                }
+                String nomeProduto = rs.getString("nome");
+                Double valorProduto = rs.getDouble("valor");
+                System.out.println("Nome: " + nomeProduto);
+                System.out.println("Valor: R$ " + String.format("%.2f",valorProduto));
+            }
+            System.out.println("--------------------------------");
+        } catch (SQLException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+    }
+
+    /*public void verCompras(int idUsuario) {
+        connectToDB();
+        String sql = "SELECT c.idCompra, c.data, c.valor, p.nome, p.valor FROM compra c, usuario u, produto p, compra_has_produto chp WHERE u.idUsuario = c.usuario_idusuario AND chp.Compra_idCompra = c.idCompra AND chp.Produto_idProduto = p.idProduto";
+        try {
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, idUsuario);
+            rs = pst.executeQuery();
+            System.out.println("Lista de Compras: ");
+            while (rs.next()){
+                Compra compraAux = new Compra(rs.getInt("idCompra"),rs.getDouble("valor"),rs.getString("data"),rs.getInt("Usuario_idUsuario"));
+                System.out.println("ID = " + compraAux.getIdCompra());
+                System.out.println("Data = " + compraAux.getData());
+                System.out.println("Valor = " + compraAux.getValor());
+                System.out.println("Produtos: ");
+                System.out.println("--------------------------------");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+    }*/
 }

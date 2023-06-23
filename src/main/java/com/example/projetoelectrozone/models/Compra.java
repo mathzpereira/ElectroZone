@@ -19,6 +19,12 @@ public class Compra {
         Usuario_idUsuario = usuario_idUsuario;
     }
 
+    public Compra(int idCompra, double valor, String data) {
+        this.idCompra = idCompra;
+        this.valor = valor;
+        this.data = data;
+    }
+
     public int getIdCompra() {
         return idCompra;
     }

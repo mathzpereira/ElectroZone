@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS electrozone.`Usuario` (
   `nome` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL UNIQUE,
   `senha` VARCHAR(20) NOT NULL,
+  `cargo` VARCHAR(20) NOT NULL,
+  `saldo` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`idUsuario`));
-
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Endereco`
@@ -30,9 +31,7 @@ CREATE TABLE IF NOT EXISTS electrozone.`Endereco` (
     FOREIGN KEY (`Usuario_idUsuario`)
     REFERENCES electrozone.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    ON UPDATE NO ACTION);
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Compra`
@@ -50,14 +49,6 @@ CREATE TABLE IF NOT EXISTS electrozone.`Compra` (
     ON UPDATE NO ACTION);
 
 -- -----------------------------------------------------
--- Table `mydb`.`Categoria`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS electrozone.`Categoria` (
-  `idCategoria` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idCategoria`));
-
--- -----------------------------------------------------
 -- Table `mydb`.`Produto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS electrozone.`Produto` (
@@ -65,14 +56,8 @@ CREATE TABLE IF NOT EXISTS electrozone.`Produto` (
   `nome` VARCHAR(45) NOT NULL,
   `valor` DOUBLE NOT NULL,
   `qtd_disponivel` INT NULL,
-  `Categoria_idCategoria` INT NOT NULL,
-  PRIMARY KEY (`idProduto`),
-  CONSTRAINT `fk_Produto_Categoria1`
-    FOREIGN KEY (`Categoria_idCategoria`)
-    REFERENCES electrozone.`Categoria` (`idCategoria`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
-
+  `categoria` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idProduto`));
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Compra_has_Produto`
@@ -87,22 +72,6 @@ CREATE TABLE IF NOT EXISTS electrozone.`Compra_has_Produto` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Compra_has_Produto_Produto1`
-    FOREIGN KEY (`Produto_idProduto`)
-    REFERENCES electrozone.`Produto` (`idProduto`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Imagem`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS electrozone.`Imagem` (
-  `idImagem` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(45) NOT NULL,
-  `dados_imagem` BLOB NOT NULL,
-  `Produto_idProduto` INT NOT NULL,
-  PRIMARY KEY (`idImagem`),
-  CONSTRAINT `fk_Imagem_Produto1`
     FOREIGN KEY (`Produto_idProduto`)
     REFERENCES electrozone.`Produto` (`idProduto`)
     ON DELETE NO ACTION

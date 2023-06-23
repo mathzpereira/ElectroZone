@@ -10,86 +10,77 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main{// extends Application {
+import static java.lang.Integer.parseInt;
+
+public class Main implements MenuLogin{
+
     public static void main(String[] args) {
 
         //declaracao das variaveis
-        boolean flag=true;
-        boolean sucesso=false;
-        int opcao;
+        boolean flag = true;
+        boolean sucesso = false;
+        String email = null;
+        String senha = null;
+        Usuario aux = null;
 
-        ProdutoDAO pd = new ProdutoDAO();
-        CategoriaDAO ctd = new CategoriaDAO();
-        CompraDAO cpd = new CompraDAO();
-        EnderecoDAO ed = new EnderecoDAO();
-        UsuarioDAO ud = new UsuarioDAO();
-        CarrinhoDAO crd = new CarrinhoDAO();
-        ImagemDAO id = new ImagemDAO();
-        Carrinho_has_ProdutoDAO chpd = new Carrinho_has_ProdutoDAO();
-
-
-        Categoria c = new Categoria("Limpeza");
-        Produto p = new Produto("Shampoo",49.99,10,1);
-        Usuario u1 = new Usuario("12345678910","Givanildo Vieira", "hulk@gmail.com","123");
-        Endereco e1 = new Endereco("Rua 1", "Centro", 7,"37540000",1);
-        Compra c1 =  new Compra(200.00,"2023-06-07",1);
-        Carrinho cr = new Carrinho(1);
-        Carrinho_has_Produto chp = new Carrinho_has_Produto(1,1);
-
-        ctd.insertCategoria(c);
-        pd.insertProduto(p);
-        ud.insertUsuario(u1);
-        ed.insertEndereco(e1);
-        cpd.insertCompra(c1);
-        crd.insertCarrinho(cr);
-        chpd.insertCarrinho_has_Produto(chp);
-
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        CompraDAO compraDAO = new CompraDAO();
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        CarrinhoDAO carrinhoDAO = new CarrinhoDAO();
+        Carrinho_has_ProdutoDAO carrinhoHasProdutoDAO = new Carrinho_has_ProdutoDAO();
+        Compra_has_ProdutoDAO compraHasProdutoDAO = new Compra_has_ProdutoDAO();
 
         //entrada de dados
         Scanner in = new Scanner(System.in);
+        while (flag) {
 
-
-        while(flag){
-
-            System.out.println("Bem-vindo à Electrozone");
-            System.out.print("Digite seu e-mail: ");
-            String email = in.nextLine();
-            System.out.print("Digite sua senha: ");
-            String senha = in.nextLine();
-            try{
-                ud.selectUsuario();
-                if(senha.equals("2"))
-                    throw new LoginFailedException();
-            }catch (LoginFailedException e){
-                break;
+            System.out.println("------------------------------------------------");
+            System.out.println("ElectroZone - O melhor lugar para comprar seus eletrônicos");
+            System.out.print("Digite 1 para fazer login ou 2 para se cadastrar ou 3 para encerrar: ");
+            int opLogin = in.nextInt();
+            while (opLogin != 1 && opLogin != 2 && opLogin != 3) {
+                System.out.println("Opção Inválida. Digite 1 para fazer login ou 2 para se cadastrar ou 3 para encerrar: ");
+                opLogin = in.nextInt();
             }
+            if (opLogin == 1) {
+                try {
+                    aux = MenuLogin.loginUsuario();
+                    sucesso = aux.sucesso;
+                    System.out.println("Login realizado com sucesso!");
+                    System.out.println("------------------------------------------------");
+                    System.out.println("Seja bem-vindo, "+aux.getNome()+"!");
+                }catch (NullPointerException e){
+                }
 
-            if(sucesso){
-                System.out.println("Menu ElectroZone");
-                System.out.println("1 - Cadastrar usuario");
-                System.out.println("2 - Listar Produtos");
-                System.out.println("3 - Comprar Produto");
-                System.out.println("4 - Ver carrinho");
-                System.out.println("5 - Adicionar novo produto");
-                System.out.println("6 - Remover produto carrinho");
-                System.out.println("7 - Atualizar produto");
-                System.out.println("8 - ");
-                opcao = in.nextInt();
-                switch (opcao){
-                    case 1:
-                        pd.selectProduto();
-                    case 2:
-                        System.out.print("Informe o id do Produto: ");
-                        int idproduto = in.nextInt();
-                        chpd.insertCarrinho_has_Produto(chp);
+            } else if (opLogin == 2)
+                MenuLogin.registrarUsuario();
+            else if (opLogin == 3)
+                flag = false;
+
+            while (sucesso) {
+                email = aux.getEmail();
+                senha = aux.getSenha();
+                MenuHelper mh = null;
+                Usuario u = usuarioDAO.selectUsuarioLogin(email, senha);
+                if (u.getCargo().equals("Cliente")) {
+                    mh = MenuLoja.menuCliente(u);
+                    flag = mh.isFlag();
+                    sucesso = mh.isSucesso();
+                }
+                else if (u.getCargo().equals("Administrador")){
+                    mh = MenuLoja.menuADM(u);
+                    flag = mh.isFlag();
+                    sucesso = mh.isSucesso();
                 }
             }
-
-
 
 
         }
 
     }
+}

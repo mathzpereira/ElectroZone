@@ -9,24 +9,26 @@ public class Usuario {
     private String cargo;
     private Carrinho carrinho;
     private Endereco endereco;
-    private static int id = 0;
+    private double saldo;
+    public boolean sucesso;
 
-
-    public Usuario(String cpf, String nome, String email, String senha) {
-        id++;
+    public Usuario(String cpf, String nome, String email, String senha, String cargo, double saldo) {
         this.cpf = cpf;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.carrinho = new Carrinho(id);
+        this.cargo = cargo;
+        this.saldo = saldo;
     }
 
-    public Usuario(int idUsuario, String cpf, String nome, String email, String senha) {
+    public Usuario(int idUsuario, String cpf, String nome, String email, String senha, String cargo, double saldo) {
         this.idUsuario = idUsuario;
         this.cpf = cpf;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        this.cargo = cargo;
+        this.saldo = saldo;
     }
 
     public String getCargo() {
@@ -75,5 +77,29 @@ public class Usuario {
 
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public Carrinho getCarrinho() {
+        return carrinho;
+    }
+
+    public void setCarrinho(Carrinho carrinho) {
+        this.carrinho = carrinho;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 }

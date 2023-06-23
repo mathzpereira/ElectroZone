@@ -5,21 +5,27 @@ public class Produto {
     private String nome;
     private double valor;
     private int qtd_disponivel;
-    private int categoria_idCategoria;
+    private String categoria;
 
-    public Produto(String nome, double valor, int qtd_disponivel, int categoria_idCategoria) {
+    public Produto(String nome, double valor, int qtd_disponivel, String categoria) {
         this.nome = nome;
         this.valor = valor;
         this.qtd_disponivel = qtd_disponivel;
-        this.categoria_idCategoria = categoria_idCategoria;
+        this.categoria = categoria;
     }
 
-    public Produto(int idProduto, String nome, double valor, int qtd_disponivel, int categoria_idCategoria) {
+    public Produto(int idProduto, String nome, double valor, int qtd_disponivel, String categoria) {
         this.idProduto = idProduto;
         this.nome = nome;
         this.valor = valor;
         this.qtd_disponivel = qtd_disponivel;
-        this.categoria_idCategoria = categoria_idCategoria;
+        this.categoria = categoria;
+    }
+
+    public Produto(int idProduto, String nome, double valor) {
+        this.idProduto = idProduto;
+        this.nome = nome;
+        this.valor = valor;
     }
 
     public int getIdProduto() {
@@ -54,11 +60,11 @@ public class Produto {
         this.qtd_disponivel = qtd_disponivel;
     }
 
-    public int getCategoria_idCategoria() {
-        return categoria_idCategoria;
+    public String getCategoria() {
+        return categoria;
     }
 
-    public void setCategoria_idCategoria(int categoria_idCategoria) {
-        this.categoria_idCategoria = categoria_idCategoria;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

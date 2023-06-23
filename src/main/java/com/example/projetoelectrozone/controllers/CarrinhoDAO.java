@@ -105,5 +105,28 @@ public class CarrinhoDAO extends ConnectionDAO{
         }
         return carrinhos;
     }
+
+    public int selectCarrinhoID(int idUsuario) {
+        connectToDB();
+        String sql = "SELECT idCarrinho FROM Carrinho, Usuario WHERE Carrinho.Usuario_idUsuario=?";
+        int idCarrinho = 0;
+        try {
+            pst = con.prepareStatement(sql);
+            pst.setInt(1, idUsuario);
+            rs = pst.executeQuery();
+            if(rs.next()){
+                idCarrinho = rs.getInt("idCarrinho");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+        return idCarrinho;
+    }
 }
 
